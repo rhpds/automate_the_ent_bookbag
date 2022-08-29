@@ -1,0 +1,5 @@
+---
+modules:
+  01-automate-demo:
+    name: 01 Automate the Enterprise
+    exit_sign: Finish Workshop

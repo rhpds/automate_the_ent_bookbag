@@ -1,0 +1,214 @@
+﻿////
+vars would go here
+:guid: %guid%
+:ocp_username: %ocp_username%
+////
+
+== Setting the stage:
+
+In this demo, we will walk through deploying a real-world application into multiple environments, such as development and pre-prod across multiple cloud providers.
+
+Multiple teams and disciplines are involved in delivering an application; frequently, there are multiple different point tools that you might be using in any given process, and it's widespread to run into manual processes and different standards. And all of those make it difficult to ensure secure, predictable, best-practice outcomes.
+
+Using a well-integrated Automation Framework across all disciplines will ensure a reduction in IT costs, faster time to market, greater security, higher resilience, and more innovation. You will spend far less time on the frictions between the different teams and eliminating manual sources of errors and misconfigurations.
+
+=== What we’ll do today
+
+We are going to explore how you can create an Automation CI/CD pipeline that deploys infrastructure across multiple cloud environments, hardens the OSs and workloads to ensure security and compliance, and deploys an application in a mixed Linux/Windows Multi-Cloud environment.
+
+//// 
+Option to show a slide, high level diagram here?
+////
+
+So, with that, let's go ahead and log into Ansible Automation Platform Controller.
+
+----
+<login to Ansible Automation Controller>
+----
+
+//// 
+Insert URL here with var substitution etc?
+////
+
+This is Ansible Automation Platform Controller, where you would be onboarding your automation and defining the automation pipelines for various scenarios. Today we will look at deploying applications across multiple cloud environments with patching, security, and application deployment.
+
+One of the powerful things about the Ansible Automation Platform is that it allows you to not only onboard your automation, your projects, and customizations, but also this would be the platform where all your teams would come in and consume the automation, onboard their automation, and really ensuring that standards, best practice, collaboration, and secure access to those projects across the board.
+
+So in this particular example, when you log into the Red Hat Automation Platform, You're presented with this dashboard view. And depending on your role access, you would be either consuming or creating automation. 
+
+So it could be a line of business coming in here, the users consuming the actual jobs or automation pipelines, if you will, or it could be an Automation Creator coming in here defining the Automation Project.  Definitions like playbooks, projects, inventories, credentials, etc. You can give access to various different teams here for them to get access.
+
+So for this particular example, I'm going to go into the resources and then templates: 
+
+////
+TODO: Insert image
+<Select the Templates Option>
+////
+
+There are two types of templates here that you can work with: job templates and workflow templates. Here for this particular example, we will look at an example with a workflow template. You can think about workflow templates as automation pipelines, for example.
+
+////
+////
+
+<Select the Workflow Templates Option: <insert-name-here>
+
+So let's look at this. So what we have in this particular case are two examples to deploy an application. In this case, a multi-OS application with Linux and Windows nodes into either dev or Test environments. And in this particular case, our dev is on AWS, and pre-production is on Azure.
+
+// <Illustrate the Workflow Templates navigation>
+
+Let's go and take a look at one of these examples. You will be presented with a graphical outline of your automation pipeline when you click the visualizer tab. All these stages represent an actual piece of the automation, where it says JT. You can also include workflow templates inside workflow templates, denoted with WT.
+
+In this particular case, of course, we're coming in here as a consumer of this automation, perhaps testing this end to end. In reality, for each of these different kinds of pillars, for example, if you're doing infrastructure, it's common that you would have the infrastructure team onboarding those capabilities. Use secure collections and content that's available via the subscription to your Ansible Automation Platform.
+
+After the infrastructure has been deployed, you would have the following team, for example, the Ops team, coming in and ensuring compliance for the OS environment and, for example, patching Linux and Windows nodes.
+
+So you can have those teams onboarding their capabilities and Best Practices, and they can each have their own release cycle, if you will. So you can have different releases, just like software development projects. 
+
+You can actually bring automation projects into the Automation Platform. So you can have different versions and releases associated with it. So, for example, a windows team can come in and create windows hardening, playbooks, or automation. Then they can test this end-to-end with any given scenario with different application types, thereby ensuring compatibility with other layers. Before releasing this new patching capability to the whole organization, the team can come in and test the overall pipeline end to end and see the behavior of the latest changes. In the case of patching, for example, it could be a new hotfix or a policy change, i.e., CIS or a STIG.
+
+[source,asciidoc,line-comment=]
+----
+CIS: The Center for Internet Security (CIS) benchmarks are a set of best-practice cybersecurity standards for a range of IT systems and products
+STIG: A Security Technical Implementation Guide is a configuration standard consisting of cybersecurity requirements for a specific product.
+----
+////
+TODO: Add links to the above callout
+////
+
+Those are types of security and compliance policies you can apply. For example, for both Linux and Windows, as those policies change or tweak, you can test them end to end and be able to release them as a new update. And then, whoever's consuming it, in production, for example, or pre-production, will consume the latest approved standard seamlessly. 
+
+So that would be the operations team, for example. And finally, in this example, the application team would bring their automation. Onboard it with their Best Practices, all their requirements, including testing, and everything else into this pipeline view.
+
+Of course, this would be using the same platform they can test end-to-end. You can share credentials across the board. So you don't have to give credentials to any given team and worry about the actual management of those credentials. You can onboard those credentials either to the platform itself, or those credentials can be in third-party applications, like Cyberark or Hashicorp Vault, and others, where we have integration to those tools. Where the actual credentials would be pooled and managed as the automation pipeline is in full motion. 
+
+So with that, let's go and run through this example, and as we're running through this example, we can look behind the scenes and uncover and discuss each of these steps and some of the capabilities that would enable this type of Automation.
+
+So with that, I'm going to go ahead and exit out of the Visualizer Mode. 
+
+----
+<Exit the visualizer mode>
+----
+
+There are a couple of ways to consume the automation from Ansible Automation Platform.  Of course, one way is just coming in here and launching from within the Template View. If I go back to this workflow type, you can come in directly and consume from the launch template. 
+
+There is also a built-in Service Catalog functionality in the platform. You can have end-users come to the  Ansible Service Catalog UI, a separate end-user-oriented UI, and order from the list. This experience simplifies the interaction for end-users. 
+
+Another widespread and easy way to consume automation is via an API call from external tools such as Jenkins. AAP2 provides API access to all of the functionality within the platform,  including the ability to request/launch automation jobs.
+
+In the case of Jenkins integration, the build pipeline inside Jenkins would be responsible for generating build artifacts and handing them off to AAP for any automation tasks. Including, like in the demo example we show today, provisioning infrastructure, applying patches and installing the newly minted build artifacts, and finally running tests at the end
+
+Another common integration here is ordering automation services from ServiceNow; any automation template can be imported into ServiceNow as a catalog item, allowing the ability to pass parameters. In addition, many other integrations are available, enabling any external tools to interact, launch, and check the jobs' status.
+
+So let's go and look at this Azure example, and I'm going to go and click the Launch Template button. 
+
+// <Insert instructions, graphic, or video reference to make this clear>
+
+So as soon as you launch a Workflow Template or Job Template, you will see this top-down view. Of course, you can stay here and look at the results. Commonly, this is actually automated via the API - i.e., request-driven. Or you would invoke it manually and come back later to the Jobs View on the left, which we will see in a moment. 
+
+Or you can just watch the result as it proceeds. So one of the essential things, of course, is that everything we do here gets stored inside the platform where you can come in and look at the reports and see exactly what changed and by whom. So, let's go into this example of Infrastructure deployment.
+
+// <Insert instructions, graphic, or video reference to make this clear>
+
+You can look at the output, and in the Output View, you'll see the changes. So anything that says changes means the actual state of the target system differs from the requested state. For example, we're creating a VPC, Security Groups, and Subnets in this case.
+
+And before you know it, we create the actual VM, or multiple instances, which happens in the next stage. So these things say change, which means this is a change rather than just validating and saying it's “ok.” Likewise, we can always come in and rerun these jobs, and nothing would change in that regard because that VPC now already exists.
+
+So that brings us to the point of what is really in Automation. You focus on the end state, what you want the end state to be, rather than the actual state of the target systems. The actual steps, like installing something, uninstalling something, if this else this, and so on, that's one of the key aspects of this framework, or Ansible is that you really focus on the end state and then the steps that would take you to that end state.
+
+All right, so going back to the *Jobs View*, You will see that you can see all the other jobs, not only what is running as we speak. What is deploying - the RHEL VM in this case. And it will also deploy a Windows VM. But you can also see historically anything that happened in the past with all the details.
+
+So let's go and click on the Job Deploying the RHEL VM. In this case, you can see all the steps associated with it, and you are not only able to see the actual steps, but you can drill into it with the Details View and see who ran this, what time it started, and what time it finished, etc.
+ 
+Then also, importantly, you can see the project details, which repository it’s stored in, and what version. This is very powerful. Just like any software development project, any Automation Project becomes like a software development project where you would define your automation inside a Git Repository. You would plug in your Git repository via a Project into the Ansible Automation Platform Controller and start consuming.
+
+You can then iterate over the automation code itself, and be able to create multiple branches, and be able to approve something on the source control depository. Which would then automatically invoke, like the example we see today, test that new code before committing into, for example, the main branch. So you can have full closed-loop automation using this approach. This is commonly referred to as GitOps, and it would be the next logical step to unlock significant value after automating individual domains using a unified platform approach.
+
+All right, so with that, let's go ahead and have a final look at this overall picture here. So if I go back into the Jobs View, I can click on that workflow job, which will give me this overall perspective of where I stand.
+
+[source,asciidoc,line-comment=]
+----
+<Of course, you may be at a different stage in the execution at this point, so SAs, etc., should ensure they are familiar with the job templates and should run through this a few times before demoing on a clean, fresh demo environment>
+----
+
+=== Patching
+
+Right now, it's going through the patching process, and soon. After the patching process completes, it will go into the actual deployment of the application. So in terms of the Patching Process, you can think about a couple of aspects of the patching here. There's the OS patching that you could be incorporating into this kind of view. Of course, you can also have the OS patches apply directly to the OS images. So, in this case, your AWS AMIs, Azure images, or for vSphere.  We can look at the Azure example to see that too.
+
+So in that example, you can have another pipeline where you would create the OS images on a specific schedule. You can create those AMI and OS images with the latest patches and hardening pre-applied into those OS images on a certain cadence.
+
+In an ideal world, you would apply your standard patching and compliance practices to the actual AMI image and then automate that using the platform and all the secure content available for automation. For example, in the case of AWS, we provide Certified Content Collections via your subscription.
+
+////
+Seems a good opportunity here ^^^ to perhaps call out Certified Content with an example.
+(We can also provide a Hub with pre-populated collections. Not necessarily to be shown but there as a reference if the customer wants to explore that topic?)
+////
+
+You have the collections available to automate AWS infrastructure. Likewise, with Azure, we have Microsoft Certified Content as a partner supported Azure collections, These allow you to manage not only the actual instances but also the ability to create and manage images and ability to work with the network, of course, and  with all the Azure services across the board.
+
+Of course, so when we talk about infrastructure, we mean across everything that you can do within the Hyperscaler there. You could incorporate these into another automation pipeline to incorporate those OS patches. But, of course, it would also make sense to have another step in the process.
+
+To ensure that if anything, for example, zero-day patching or something available that you need to enforce before going into production or pre-production, for example, or your testing and test environments, you can catch those and incorporate those into your automation pipeline like here and include them.
+
+We can click any of the jobs to inspect the actual steps, of course, e.g., the Windows Patch, for example. We are scanning the actual updates that are pending and applying them.
+
+Let’s go back to the top-level Workflow View. In this view, we're not showing the actual rollback. Still, you can add a rollback step here, meaning that if the Windows Patching step isn’t successful, we can roll this back automatically and go back to where we were, which in this case is just plain Windows Installation because this is an end to end pipeline. It doesn't make sense here to incorporate a rollback because we are dealing with Greenfield deployment here. The rollback could simply be removing the failed VM and sending an alert or notification to the Administrator.
+
+But if this was a Brown Field installation, you could at a step for rollback to a previous step. For example, it could be going back to a snapshot or uninstalling a package, whatever that might be.
+
+One of the important things to note is that we need a way to select the system we need to work with, given any automation if we look at the job view. For example, if I look at Windows Patching again, in the details view. Notice here that it uses a Workshop Inventory for this particular demo.
+
+Let’s click on the Workshop Inventory to bring up the record. And if I look at the source tab here, you will see that we have, in this case, an Azure source. So this is very important because if you are dealing with multiple instances, dealing with any large environments, you will have multiple different instances coming in and being provisioned from this environment and providers.
+
+And for any given application, you're going to be using a particular set of instances versus other instances that may already be out there deployed for different applications or other reasons. All the while, your automation needs to perform the automation steps against the correct subset, or groups, of instances.
+
+And that is all enabled through the Inventory capability. So we do provide, out of the box, Inventory Sources for multiple different cloud and virtualization providers, including VMware, Azure, AWS, Google Cloud Platform, and others as well. So the idea here is that you would actually plugin or select from the drop-down here. The source, in this case, is Azure, and you would provide the credentials.
+
+So what would happen is before it runs any Automation, in our case, deploying and running the windows patching and then finally deploying the application. It will go ahead and ask the Azure Provider for the actual instances running using the credentials provided. This will provide consistency and ensure that you don't have any manual steps to define your IP addresses or similar customizations.
+
+So, not only do you have information about what you're targeting in terms of the IP address, for example, or the hostname, but that dynamic inventory update process will also get a bunch of other relevant information automatically for you directly from the provider.
+
+This is before you even touch the target systems. So you are going to get information like hostnames and tags. Which will be group names here, and you can also define anything else. 
+
+So let's go ahead and look at an example here. And if  I look back to the Inventory view and click our Inventory for this demo and click Groups, you will find out the group names are automatically defined based on the tags attached to those instances. Of course, all this happens based on the standards you defined in the Ansible automation playbooks.
+
+Let’s click the host view after selecting the Windows Group; you will see that we have two Windows nodes in this case. And if I click the first one, you will see that you have the host IP address and the actual creation, date, volume ID, and a bunch of other information that could be useful inside your Automation.
+
+So all of these serve as variables that will be available to the Automation Developer. On top of that, you can generate any additional variables or facts during the execution of any jobs and cache them, making them available in the Facts tab.
+
+And you can generate even more insight from within the automation environment. For example, which patches are installed when we install the patches, you could cache these and generate even more insights and reports. Based on the actual environment. 
+
+This becomes a powerful feature when it comes down to understanding and executing the automation but also making that information available to any other tool out there via the API. So anything that we have inside inventory is available via the API externally. 
+
+So, for example, in our case, AWS  and Azure, or perhaps you use Google or VMware if you have multiple environments like then, suddenly you now have one platform that gives you visibility into these. Everything runs in the environment and all the operational knowledge that goes with it. 
+
+=== Recap:
+
+As a recap of what we've seen, using the secure collections and content available within the platform, various teams can create and bring their own automation playbooks onboard, give access to other teams and use them as push-button deployment for Line of Business users or Ops teams.
+
+Then you can then finally create these powerful automation pipelines workflows to test automation end-to-end and validate the automation before promoting it to the next stage. Finally, you can give access to end-users and users where they can not only consume the automation within the platform as we've done here, but also they can come in via ServiceNow, Jenkins, and via other tools out there and consume the Automation the same way across all domains. 
+
+This helps standardize your automation across all the teams eliminating any manual processes, loss of productivity, and security issues arising from a lack of standardization and visibility.
+
+And that concludes our demo today.
+
+Thank You and Questions
+
+
+
+
+
+
+[a]Insert final workflow template name
+[b]Instructions or graphic, link to place in video to support this?
+[c]What do people think? I can see a place for callouts when say an SA might not be 100% sure what STIG is for example? I could see them being inline in the transcript perhaps on a grey background as illustrated. @oatakan@redhat.com @scolvill@redhat.com
+[d]I think callout with brief summary and a link to additional content where it makes sense (in the future we should have other demos in most of these areas, now they are fragmented and not based on the current demo platform). People can google the definition to find more information too.
+[e]Clarify against recording
+[f]Maybe make image link?
+[g]@oatakan@redhat.com I think we need to provide a side document that gives a high-level overview of the Workflow Template and maybe some tips. EG many RH SAs are not so strong on say Windows patching or communication. We can look at an overview guide? Thoughts? Are there any READMEs re the workflow?
+_Assigned to Orcun Atakan_
+[h]We can link to this guide I think: https://www.ansible.com/blog/windows-updates-and-ansible
+[i]Reference Ansible Certified Content?
+[j]Just experimenting a bit, currently, with a callout style
+[k]Do we want to enable this to be pre-populated in the demo and turned on. To give the viewer something to see here?
+[l]I think so, it would show well here if it's available
+[m]I'll capture it and put it on the backlog, it shouldn't slow us up, but it's nice to have it soon. Oh that is one for you @oatakan@redhat.com since you own the workflow repo:)

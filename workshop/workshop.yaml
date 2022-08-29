@@ -1,0 +1,5 @@
+---
+name: Automate the Enterprise
+modules:
+  activate:
+    - 01-automate-demo
