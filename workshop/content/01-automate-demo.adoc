@@ -1,9 +1,8 @@
-﻿:guid: tok-ate-01
-:name: tok
+﻿:guid: %guid%
 
 == Setting the stage:
 
-Hi I'm {name} and my GUID is: {guid}
+Hi I'm {name} and my GUID is: {guid} or %guid% with % delimiter
 
 In this demo, we will walk through deploying a real-world application into multiple environments, such as development and pre-prod across multiple cloud providers.
 
