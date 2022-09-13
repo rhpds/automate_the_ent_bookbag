@@ -1,5 +1,8 @@
 ---
 modules:
   01-automate-demo:
-    name: 01 Automate the Enterprise
+    name: 01 Overview - Automate the Enterprise
+    exit_sign: Continue
+  02-automate-demo:
+    name: 02 Main - Automate the Enterprise
     exit_sign: Finish Workshop

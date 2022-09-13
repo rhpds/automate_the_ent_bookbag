@@ -5,7 +5,10 @@ Bookbag repo for *Automate the Enterprise*
 
 === Developer Notes
 
-This is based on an OCP Bookbag Repo and would benefit from a bit of a . re-write.
+This is based on an OCP Bookbag Repo and would benefit from a bit of a re-write.
 
-* Based on https://github.com/redhat-gpte-devopsautomation/ohc_demo_bookbag
+* Originally Based on https://github.com/redhat-gpte-devopsautomation/ohc_demo_bookbag
+** Extended based on  https://github.com/redhat-gpte-devopsautomation/convert-to-rhel-bookbag.git
+
+
 

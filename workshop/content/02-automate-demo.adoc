@@ -13,12 +13,6 @@ Using a well-integrated Automation Framework across all disciplines will ensure 
 
 === What we’ll do today
 
-[source,bash,role=execute]
-----
-ls /etc
-----
-
-
 We are going to explore how you can create an Automation CI/CD pipeline that deploys infrastructure across multiple cloud environments, hardens the OSs and workloads to ensure security and compliance, and deploys an application in a mixed Linux/Windows Multi-Cloud environment.
 
 //// 
