@@ -10,5 +10,12 @@ This is based on an OCP Bookbag Repo and would benefit from a bit of a re-write.
 * Originally Based on https://github.com/redhat-gpte-devopsautomation/ohc_demo_bookbag
 ** Extended based on  https://github.com/redhat-gpte-devopsautomation/convert-to-rhel-bookbag.git
 
+==== Building and run Locally
 
+[source,sh]
+----
+docker build -t homeroom:0.0.2 . #tag to your choice
+docker run -d --rm --name homeroom-01 -p 8080:10080 homeroom:0.0.2
+----
+Obviously you can explore via `docker exec -it homeroom-01 bash`
 

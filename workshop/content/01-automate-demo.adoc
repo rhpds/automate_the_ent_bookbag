@@ -1,4 +1,5 @@
 ﻿:guid: %guid%
+:name: hard-coded-name
 
 == Setting the stage:
 
